@@ -13,7 +13,7 @@ class ArticleSpider(scrapy.Spider):
 
     def start_requests(self):
         sign = "4c321210d34ada301e507ad42f5757a5"
-        url = "https://www.cls.cn/nodeapi/telegraphs?refresh_type=1&rn=20&last_time=1562952533&token=&app=CailianpressWeb&os=web&sv=6.8.0&sign=3fc802d5aa63049183eaeae29c865536"
+        url = "https://www.cls.cn/nodeapi/telegraphs?refresh_type=1&rn=20&last_time=1563017880&token=&app=CailianpressWeb&os=web&sv=6.8.0&sign=a98665a56b27da4d2ed8d8c0307be403"
         headers = {
             "Host": "www.cls.cn",
             "Referer": "https://www.cls.cn/",
@@ -48,10 +48,12 @@ class ArticleSpider(scrapy.Spider):
             item['title'] = title
             item['brief'] = brief
             item['content'] = content
-            item['share_url'] = share_url
+            item['url'] = share_url
             item['create_date'] = self.time_switch(int(create_date))
             item['stock_code'] = stock_code
             item['stock_name'] = stock_name
+            item['source'] = "财联社"
+            item['website'] = "https://www.cls.cn/"
 
             yield item
 
