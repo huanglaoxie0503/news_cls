@@ -6,10 +6,13 @@
 # https://doc.scrapy.org/en/latest/topics/items.html
 
 import scrapy
+import redis
 from tools.es_models import NewsClsType
 from elasticsearch_dsl.connections import connections
 
 es = connections.create_connection(NewsClsType._doc_type.using)
+
+redis_cli = redis.StrictRedis(host="127.0.0.1")
 
 
 def gen_suggest(index, info_tuple):
@@ -64,5 +67,7 @@ class NewsClsItem(scrapy.Item):
                                       ((article.title, 10), (article.brief, 7)))
 
         article.save()
+        # 计算新闻总条数
+        redis_cli.incr("cls_count")
 
         return
