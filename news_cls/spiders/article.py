@@ -12,7 +12,7 @@ class ArticleSpider(scrapy.Spider):
     start_urls = ['http://www.cls.cn/']
 
     def start_requests(self):
-        url = "https://www.cls.cn/nodeapi/telegraphs?refresh_type=1&rn=20&last_time=1563116531&token=&app=CailianpressWeb&os=web&sv=6.8.0&sign=c960eeed6b420cfe1980458cf8cc794b"
+        url = 'https://www.cailianpress.com/nodeapi/telegraphs?refresh_type=1&rn=20&sign=4c321210d34ada301e507ad42f5757a5'
         headers = {
             "Host": "www.cls.cn",
             "Referer": "https://www.cls.cn/",
