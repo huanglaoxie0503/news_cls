@@ -7,7 +7,30 @@
 3、kibana-5.1.1
 
 ----
-破解更新财联社sign标签
+破解财联社sign标签加密
 ```python
-sign=4c321210d34ada301e507ad42f5757a5
+import time
+from hashlib import sha1
+from hashlib import md5
+
+dt = int(time.time())
+
+a = "app=CailianpressWeb&hasFirstVipArticle=1&last_time={0}&os=web&refresh_type=0&rn=20&subscribedColumnIds=&sv=6.8.0".format(dt)
+
+
+def get_sign(keywords):
+    # 首先sha1加密
+    psw = sha1()
+    psw.update(keywords.encode('utf8'))
+    s_pwd_sha1 = psw.hexdigest()
+    # sha1加密结果再次md5加密
+    hash_md5 = md5(s_pwd_sha1.encode('utf8'))
+    psw = hash_md5.hexdigest()
+    return psw
+
+
+if __name__ == '__main__':
+    sign = get_sign(a)
+    print(sign)
+
 ```
