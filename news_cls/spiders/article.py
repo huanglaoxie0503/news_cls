@@ -2,6 +2,9 @@
 import scrapy
 import json
 import datetime
+import time
+from hashlib import sha1
+from hashlib import md5
 
 from news_cls.items import NewsClsItem
 
@@ -10,9 +13,14 @@ class ArticleSpider(scrapy.Spider):
     name = 'article'
     allowed_domains = ['www.cls.cn']
     start_urls = ['http://www.cls.cn/']
+    dt = int(time.time())
+
+    params = "app=CailianpressWeb&hasFirstVipArticle=1&last_time={0}&os=web&refresh_type=0&rn=20&subscribedColumnIds=&sv=6.8.0".format(dt)
 
     def start_requests(self):
-        url = 'https://www.cailianpress.com/nodeapi/telegraphs?refresh_type=1&rn=20&sign=4c321210d34ada301e507ad42f5757a5'
+        sign = self.get_sign(self.params)
+        # 4c321210d34ada301e507ad42f5757a5
+        url = 'https://www.cailianpress.com/nodeapi/telegraphs?refresh_type=1&rn=20&sign={0}'.format(sign)
         headers = {
             "Host": "www.cls.cn",
             "Referer": "https://www.cls.cn/",
@@ -60,3 +68,13 @@ class ArticleSpider(scrapy.Spider):
         date_array = datetime.datetime.utcfromtimestamp(time_stamp)
         other_style_time = date_array.strftime("%Y-%m-%d %H:%M:%S")
         return other_style_time
+
+    def get_sign(self, keywords):
+        # 首先sha1加密
+        psw = sha1()
+        psw.update(keywords.encode('utf8'))
+        s_pwd_sha1 = psw.hexdigest()
+        # sha1加密结果再次md5加密
+        hash_md5 = md5(s_pwd_sha1.encode('utf8'))
+        psw = hash_md5.hexdigest()
+        return psw
